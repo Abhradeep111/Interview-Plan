@@ -8,6 +8,7 @@ const Home = () => {
     const { loading, generateReport,reports } = useInterview()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
+    const [ selectedResume, setSelectedResume ] = useState(null)
     const resumeInputRef = useRef()
 
     const navigate = useNavigate()
@@ -18,9 +19,24 @@ const Home = () => {
         navigate(`/interview/${data._id}`)
     }
 
+    const handleResumeChange = (e) => {
+        const file = e.target.files?.[ 0 ]
+
+        if (!file) {
+            setSelectedResume(null)
+            return
+        }
+
+        setSelectedResume({
+            name: file.name,
+            sizeInMb: (file.size / (1024 * 1024)).toFixed(2)
+        })
+    }
+
     if (loading) {
         return (
             <main className='loading-screen'>
+                <div className='loading-spinner' />
                 <h1>Loading your interview plan...</h1>
             </main>
         )
@@ -81,8 +97,23 @@ const Home = () => {
                                 </span>
                                 <p className='dropzone__title'>Click to upload or drag &amp; drop</p>
                                 <p className='dropzone__subtitle'>PDF or DOCX (Max 5MB)</p>
-                                <input ref={resumeInputRef} hidden type='file' id='resume' name='resume' accept='.pdf,.docx' />
+                                <input
+                                    ref={resumeInputRef}
+                                    hidden
+                                    type='file'
+                                    id='resume'
+                                    name='resume'
+                                    accept='.pdf,.docx'
+                                    onChange={handleResumeChange}
+                                />
                             </label>
+                            {selectedResume && (
+                                <div className='file-status'>
+                                    <span className='file-status__badge'>Selected</span>
+                                    <p className='file-status__name'>{selectedResume.name}</p>
+                                    <p className='file-status__meta'>{selectedResume.sizeInMb} MB</p>
+                                </div>
+                            )}
                         </div>
 
                         {/* OR Divider */}

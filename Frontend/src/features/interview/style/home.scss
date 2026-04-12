@@ -1,4 +1,6 @@
 // ── Variables ────────────────────────────────────────────────────────────────
+@use "sass:color";
+
 $bg-page:        #0d1117;
 $bg-card:        #161b22;
 $bg-panel:       #1c2230;
@@ -202,6 +204,39 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
     gap: 0.5rem;
 }
 
+.file-status {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.75rem 0.9rem;
+    background-color: rgba($accent, 0.08);
+    border: 1px solid rgba($accent, 0.22);
+    border-radius: 0.6rem;
+
+    &__badge {
+        width: fit-content;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: $accent;
+    }
+
+    &__name {
+        margin: 0;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: $text-primary;
+        word-break: break-word;
+    }
+
+    &__meta {
+        margin: 0;
+        font-size: 0.75rem;
+        color: $text-muted;
+    }
+}
+
 .dropzone {
     display: flex;
     flex-direction: column;
@@ -301,7 +336,7 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, $accent 0%, darken($accent, 10%) 100%);
+    background: linear-gradient(135deg, $accent 0%, color.adjust($accent, $lightness: -10%) 100%);
     color: #fff;
     font-size: 0.9rem;
     font-weight: 600;

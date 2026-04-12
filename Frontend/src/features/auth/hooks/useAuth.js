@@ -7,10 +7,11 @@ import { login, register, logout, getMe } from "../services/auth.api";
 export const useAuth = () => {
 
     const context = useContext(AuthContext)
-    const { user, setUser, loading, setLoading } = context
+    const { user, setUser, loading, setLoading, loadingText, setLoadingText } = context
 
 
     const handleLogin = async ({ email, password }) => {
+        setLoadingText("Loading...")
         setLoading(true)
         try {
             const data = await login({ email, password })
@@ -23,6 +24,7 @@ export const useAuth = () => {
     }
 
     const handleRegister = async ({ username, email, password }) => {
+        setLoadingText("Loading...")
         setLoading(true)
         try {
             const data = await register({ username, email, password })
@@ -35,6 +37,7 @@ export const useAuth = () => {
     }
 
     const handleLogout = async () => {
+        setLoadingText("Logging out...")
         setLoading(true)
         try {
             const data = await logout()
@@ -50,6 +53,7 @@ export const useAuth = () => {
 
         const getAndSetUser = async () => {
             try {
+                setLoadingText("Loading...")
 
                 const data = await getMe()
                 setUser(data.user)
@@ -62,5 +66,5 @@ export const useAuth = () => {
 
     }, [])
 
-    return { user, loading, handleRegister, handleLogin, handleLogout }
+    return { user, loading, loadingText, handleRegister, handleLogin, handleLogout }
 }
