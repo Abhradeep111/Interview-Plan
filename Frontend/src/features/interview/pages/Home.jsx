@@ -9,13 +9,32 @@ const Home = () => {
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
     const [ selectedResume, setSelectedResume ] = useState(null)
+    const [ error, setError ] = useState("")
     const resumeInputRef = useRef()
 
     const navigate = useNavigate()
 
     const handleGenerateReport = async () => {
+        setError("")
+
         const resumeFile = resumeInputRef.current.files[ 0 ]
         const data = await generateReport({ jobDescription, selfDescription, resumeFile })
+
+        if (data?.error) {
+            if (data.status === 503) {
+                setError("Backend service is unavailable right now. Please wait a minute and try again.")
+                return
+            }
+
+            setError(data.message)
+            return
+        }
+
+        if (!data?._id) {
+            setError("Unable to generate your interview strategy right now. Please try again.")
+            return
+        }
+
         navigate(`/interview/${data._id}`)
     }
 
@@ -151,6 +170,8 @@ const Home = () => {
                         Generate My Interview Strategy
                     </button>
                 </div>
+
+                {error && <p className='form-error'>{error}</p>}
             </div>
 
             {/* Recent Reports List */}
